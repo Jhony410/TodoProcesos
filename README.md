@@ -2,6 +2,12 @@
 
 Este repositorio contiene la documentación y el modelamiento del **Proceso de Titulación de Pregrado de la Universidad Nacional del Altiplano (UNAP)**, enfocado en la propuesta de mejora **TO BE**. El objetivo es optimizar la gestión de tesis a través de la plataforma PILAR, eliminando cuellos de botella y mejorando la transparencia institucional.
 
+## Autores
+- Jhon Elias Aguilar Anccori
+- Elmer Jose Pongo Callo
+- Juan Jael Soncco Casquino
+
+
 ## 📋 Descripción General
 El proceso "TO BE" propone una transición digital completa, donde la interacción entre el tesista, los jurados y las unidades académicas se centraliza en una plataforma única. Esto reduce los tiempos de espera y automatiza tareas administrativas como el sorteo de jurados y la generación de actas.
 
