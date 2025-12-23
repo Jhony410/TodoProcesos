@@ -16,69 +16,79 @@ El proceso "TO BE" propone una transición digital completa, donde la interacci�
 
 A continuación se detalla el flujo de trabajo optimizado para la aprobación de proyectos de tesis:
 
-### Diagrama de Flujo del Proceso
+### Diagrama de Flujo del Proceso (Sequence)
+
 ```mermaid
-graph TD
-    %% Estilos de nodos
-    classDef inicio fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef fin fill:#ffebee,stroke:#b71c1c,stroke-width:2px;
-    classDef proceso fill:#fff,stroke:#333,stroke-width:1px;
-    classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:1px;
+sequenceDiagram
+    participant T as Tesista
+    participant P as Plataforma PILAR
+    participant D as Director (EP)
+    participant U as Unidad (VRI)
+    participant J as Jurados
 
-    subgraph Tesista
-        A((Inicio)) --> B{¿Tiene cuenta?}
-        C[Subir Proyecto]
-        L[Corregir proyecto Pre-sorteo]
-        Q[Corregir proyecto Post-sorteo]
+    Note over T,J: Paso 1: Inicio y Registro
+    T->>P: ¿Tiene cuenta?
+    alt No
+        P->>T: Crear cuenta en PILAR
+    else Si
+        Note right of T: Procede a subir proyecto
     end
 
-    subgraph Plataforma_PILAR
-        D[Crear cuenta]
-        E{¿Cumple formato?}
-        F[Declarar proyecto no presentado]
-        M[Sorteo de Jurados]
-        S[Generar acta de aprobación]
-        T((Fin))
+    Note over T,J: Paso 2: Carga de Proyecto
+    T->>P: Subir Proyecto (Borrador + Similitud)
+    P->>P: Validar Formato de Archivos
+
+    Note over T,J: Paso 3: Validaciones Académicas
+    alt Formato Correcto
+        P->>D: Notificar Proyecto Pendiente
+        D->>D: Revisar Conformidad
+        alt No Conforme
+            D->>T: Solicitar Corrección Pre-Sorteo
+            T->>P: Subir Proyecto Corregido
+        else Conforme
+            D->>U: Enviar a Validación VRI
+            U->>U: Validar Proyecto Técnicamente
+            alt No Válido
+                U->>T: Solicitar Corrección Pre-Sorteo
+                T->>P: Subir Proyecto Corregido
+            else Válido
+                U->>P: Habilitar para Sorteo
+            end
+        end
+    else Formato Incorrecto
+        P->>T: Notificar Error de Formato
+        T->>P: Subir Archivos Corregidos
     end
 
-    subgraph Director_EP
-        G{¿Conformidad?}
+    Note over T,J: Paso 4: Sorteo de Jurados
+    P->>P: Realizar Sorteo Electrónico
+    P->>J: Notificar Designación
+
+    loop Aceptación de Cargo
+        J->>P: ¿Acepta ser Jurado?
+        alt No
+            P->>P: Re-sortear Jurado faltante
+        else Si
+            Note right of J: Inicia revisión
+        end
     end
 
-    subgraph Unidad_Investigacion
-        H{¿Valida Proyecto?}
+    Note over T,J: Paso 5: Revisión y Dictamen
+    J->>J: Evaluar Proyecto
+    J->>P: Emitir Dictamen
+    alt Observaciones
+        P->>T: Solicitar Corrección Post-Sorteo
+        T->>P: Subir Documentos de Corrección
+        P->>J: Enviar para Re-evaluación
+    else Aprobado
+        Note right of J: Jurados Aprueban Proyecto
     end
 
-    subgraph Jurados
-        N{¿Acepta Cargo?}
-        O[Proceso de Revisión]
-        P{¿Aprueba Proyecto?}
-    end
-
-    %% Conexiones
-    A --> B
-    B -- No --> D --> C
-    B -- Si --> C
-    C --> E
-    E -- No --> L --> C
-    E -- Si --> G
-    G -- No/Sin Rpta --> F
-    G -- Si --> H
-    H -- No --> L
-    H -- Si --> M
-    M --> N
-    N -- No --> M
-    N -- Si --> O
-    O --> P
-    P -- No --> Q --> O
-    P -- Si --> S --> T
-
-    %% Aplicar clases
-    class A inicio;
-    class T fin;
-    class B,E,G,H,N,P decision;
-    class C,D,F,L,M,O,Q,S proceso;
+    Note over T,J: Paso 6: Aprobación Final
+    P->>P: Generar Acta de Aprobación
+    P->>T: Notificar Aprobación y Entrega de Acta
 ```
+
 
 ## 🚀 Mejoras Implementadas (Propuesta TO BE)
 Basado en el análisis de puntos de dolor (Pain Points), el modelo TO BE aborda:
